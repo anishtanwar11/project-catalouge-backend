@@ -9,14 +9,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/",
-            "methods": ["GET", "POST"]
+            "dest": "index.js"
         }
-    ],
-    "functions": {
-        "api": {
-            "runtime": "nodejs14.x",
-            "maxDuration": 30
-        }
-    }
+    ]
 }
