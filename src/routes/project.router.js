@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import multer from 'multer';
 import Project from '../models/project.js';
 import {v2 as cloudinary} from 'cloudinary';
