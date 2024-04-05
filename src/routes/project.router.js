@@ -75,10 +75,10 @@ router.get('/', async (req, res) => {
 });
 
 //Get projects by ID
-router.get('/:name', async(req, res) => {
-    const projectName = req.params.name;
+router.get('/:userId', async(req, res) => {
+    const userId = req.params.userId;
     try {
-        const project = await Project.findOne({ name: projectName });
+        const project = await Project.findById(userId);
         if(!project){
             return res.status(400).json({message: 'Project Not Found!'})
         }
