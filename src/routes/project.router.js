@@ -15,7 +15,9 @@ const Storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: Storage }); 
+const upload = multer({ 
+    storage: Storage
+ }); 
 
 router.post('/upload', upload.single("imageUrl"), (req, res) => {
     if(!req.file) {
@@ -23,12 +25,14 @@ router.post('/upload', upload.single("imageUrl"), (req, res) => {
     }
 
     const imageUrl = req.file.filename;
-    res.json({ imageUrl: imageUrl});
+    res.json({ 
+        imageUrl: `https://project-catalouge-backend.vercel.app/Images/${imageUrl}`
+    });
 })
 
 router.post('/add', upload.single('imageUrl'), async(req, res) => {
     const { name, description, techStack, category, liveLink, sourceCodeLink } = req.body;
-    const imageUrl = req.file.filename;
+    const imageUrl = `https://project-catalouge-backend.vercel.app/Images/${req.file.filename}`;
 
     try {
         const newProject = new Project({ name, description, techStack, category, liveLink, sourceCodeLink, imageUrl});
