@@ -47,7 +47,6 @@ app.use(cors({
   })
 );
 app.use(express.static('public'))
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ 
   secret: 'your-secret-key', // Specify a secret key for session encryption
   resave: false,
