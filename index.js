@@ -40,7 +40,12 @@ passport.deserializeUser((username, done) => {
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 app.use(express.static('public'))
 app.use(session({ 
   secret: 'your-secret-key', // Specify a secret key for session encryption
