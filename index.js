@@ -9,6 +9,7 @@ import cors from 'cors';
 import passport from 'passport';
 import session from 'express-session'; // Import express-session
 import { Strategy as LocalStrategy } from 'passport-local';
+import fileUpload from 'express-fileupload';
 
 import userRouter from './src/routes/user.router.js';
 import projectRouter from './src/routes/project.router.js';
@@ -38,7 +39,9 @@ passport.deserializeUser((username, done) => {
 });
 
 const app = express();
-
+app.use(fileUpload({
+  useTempFiles:true
+}))
 app.use(express.json());
 app.use(cors({
   credentials: true,
