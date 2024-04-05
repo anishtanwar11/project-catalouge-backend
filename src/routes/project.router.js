@@ -1,47 +1,65 @@
 import multer from 'multer';
 import Project from '../models/project.js';
-
+import {v2 as cloudinary} from 'cloudinary';
 import express from 'express';
 
 const router = express.Router();
 
-// Set up multer Storage
-const Storage = multer.diskStorage({
-    destination: function (req, file, cb){
-        cb(null, 'public/Images')
-    },
-    filename: function(req, file, cb){
-        cb(null, `${Date.now()}-${file.originalname}`);
-    }
+cloudinary.config({ 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-const upload = multer({ 
-    storage: Storage
- }); 
+// Set up multer Storage
+// const Storage = multer.diskStorage({
+//     destination: function (req, file, cb){
+//         cb(null, 'public/Images')
+//     },
+//     filename: function(req, file, cb){
+//         cb(null, `${Date.now()}-${file.originalname}`);
+//     }
+// });
 
-router.post('/upload', upload.single("imageUrl"), (req, res) => {
-    if(!req.file) {
-        return res.status(400).json({ message: "No file uploaded"});
-    }
+// const upload = multer({ 
+//     storage: Storage
+//  }); 
 
-    const imageUrl = req.file.filename;
-    res.json({ 
-        imageUrl: `https://project-catalouge-backend.vercel.app/Images/${imageUrl}`
-    });
-})
+// router.post('/upload', upload.single("imageUrl"), (req, res) => {
+//     if(!req.file) {
+//         return res.status(400).json({ message: "No file uploaded"});
+//     }
 
-router.post('/add', upload.single('imageUrl'), async(req, res) => {
+//     const imageUrl = req.file.filename;
+//     res.json({ 
+//         imageUrl: `https://project-catalouge-backend.vercel.app/Images/${imageUrl}`
+//     });
+// })
+
+router.post('/add', async (req, res) => {
+    console.log(req.body);
     const { name, description, techStack, category, liveLink, sourceCodeLink } = req.body;
-    const imageUrl = `https://project-catalouge-backend.vercel.app/Images/${req.file.filename}`;
+    const file = req.files.imageUrl;
+    cloudinary.uploader.upload(file.tempFilePath, async (err,result)=> {
+        console.log(result);
 
-    try {
-        const newProject = new Project({ name, description, techStack, category, liveLink, sourceCodeLink, imageUrl});
-        await newProject.save();
-        res.status(200).json('Project added successfuly!')
-    } catch (error) {
-        res.status(400).json({ message: "Error adding project" });
-    }
-})
+        const imageUrl = result.url;
+        try {
+            // Create new project object with image URL
+            const newProject = new Project({name, description,techStack, category, liveLink, sourceCodeLink, imageUrl});
+    
+            // Save project to database
+            await newProject.save();
+    
+            // Respond with success message
+            res.status(200).json({ message: 'Project added successfully!'});
+        } catch (error) {
+            console.error("Error adding project:", error);
+            res.status(500).json({ message: 'Error adding project', error: error.message });
+        }
+    })
+    
+});
 
 // Get all projects
 router.get('/', async (req, res) => {
