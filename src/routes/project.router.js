@@ -1,18 +1,17 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import multer from 'multer';
 import Project from '../models/project.js';
 import {v2 as cloudinary} from 'cloudinary';
 import express from 'express';
 
 const router = express.Router();
 
-// cloudinary.config({ 
-//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-//     api_key: process.env.CLOUDINARY_API_KEY, 
-//     api_secret: process.env.CLOUDINARY_API_SECRET
-// });
+cloudinary.config({ 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 
 
@@ -20,28 +19,25 @@ const router = express.Router();
 router.post('/add', async (req, res) => {
     console.log(req.body);
     const { name, description, techStack, category, liveLink, sourceCodeLink } = req.body;
-    // const file = req.files.imageUrl;
-    // cloudinary.uploader.upload(file.tempFilePath, async (err,result)=> {
-    //     console.log(result);
-
-    //     const imageUrl = result.url;
-       
-    // })
-    try {
-        // Create new project object with image URL
-        const newProject = new Project({name, description,techStack, category, liveLink, sourceCodeLink});
-
-        // Save project to database
-        await newProject.save();
-
-        // Respond with success message
-        res.status(200).json({ message: 'Project added successfully!'});
-    } catch (error) {
-        console.error("Error adding project:", error);
-        res.status(500).json({ message: 'Error adding project', error: error.message });
-    }
-    
+    const file = req.files.imageUrl;
+    cloudinary.uploader.upload(file.tempFilePath, async (err,result)=> {
+        console.log(result);
+        const imageUrl = result.url;
+        try {
+            // Create new project object with image URL
+            const newProject = new Project({name, description,techStack, category, liveLink, sourceCodeLink, imageUrl});
+            // Save project to database
+            await newProject.save();
+            // Respond with success message
+            res.status(200).json({ message: 'Project added successfully!'});
+        } catch (error) {
+            console.error("Error adding project:", error);
+            res.status(500).json({ message: 'Error adding project', error: error.message });
+        } 
+    }) 
 });
+
+
 
 // Get all projects
 router.get('/', async (req, res) => {
