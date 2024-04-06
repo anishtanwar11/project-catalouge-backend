@@ -43,11 +43,15 @@ app.use(fileUpload({
   useTempFiles:true
 }))
 app.use(express.json());
-app.use(cors({
-  origin: 'http://localhost:3000', // Allow requests from localhost:3000
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specified HTTP methods
-  credentials: true // Allow sending cookies and other credentials
-}));
+app.use(
+  cors({
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+    },
+    credentials: true,
+  })
+)
 app.use(express.static('public'));
 app.use(session({ 
   secret: 'your-secret-key', // Specify a secret key for session encryption
