@@ -45,11 +45,16 @@ app.use(fileUpload({
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000"],
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
   })
 )
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET ');
+header('Access-Control-Allow-Headers: Content-Type, X-Auth-Token, Origin, Authorization');
+
+
 app.use(express.static('public'));
 app.use(session({ 
   secret: 'your-secret-key', // Specify a secret key for session encryption
