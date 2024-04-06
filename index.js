@@ -46,9 +46,9 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use(fileUpload({
-  useTempFiles:true
-}))
+// app.use(fileUpload({
+//   useTempFiles:true
+// }))
 
 app.use(express.json());
 app.use(
