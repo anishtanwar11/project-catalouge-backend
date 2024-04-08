@@ -13,9 +13,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-
-
-
+//Route for creating newproject
 router.post('/add', async (req, res) => {
     console.log(req.body);
     const { name, description, techStack, category, liveLink, sourceCodeLink } = req.body;
