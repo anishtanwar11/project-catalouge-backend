@@ -40,7 +40,7 @@ router.post('/add', async (req, res) => {
 // Get all projects
 router.get('/', async (req, res) => {
     try {
-      const projects = await Project.find();
+      const projects = await Project.find().sort({_id:-1});
       res.json(projects);
     } catch (error) {
       res.status(500).json({ message: error.message });
