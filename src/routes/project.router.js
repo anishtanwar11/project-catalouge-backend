@@ -65,7 +65,7 @@ router.get('/:userId', async(req, res) => {
 router.get('/category/:category', async (req, res) => {
     const category = req.params.category;
     try {
-      const projects = await Project.find({ category });
+      const projects = await Project.find({ category }).sort( { _id : -1} );
       res.json(projects);
     } catch (error) {
       res.status(500).json({ message: error.message });
