@@ -53,7 +53,7 @@ app.use(fileUpload({
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://frontendstudios.netlify.app", "http://localhost:3000"],
+    origin: ["https://frontendstudios.netlify.app", "http://localhost:3000", "https://anishtanwar.vercel.app"],
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
   })
